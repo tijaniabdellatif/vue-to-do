@@ -56,13 +56,15 @@ import Vue from 'vue';
 
 export default {
 
+  
+  props:{
+      value: {type:Array,default() {return []}}
+  },
+
   /* State with data() */
    data (){
         return {
-            todos:[{
-                name : 'Test Task',
-                completed : false
-            }],
+            todos:this.value,
             newTodo : '',
             filter:'all',
             editing : null,
@@ -84,10 +86,12 @@ export default {
        deleteTodo(todo){
 
            this.todos = this.todos.filter(item => item !== todo)
-       },
+           this.$emit('input',this.todos)
+      },
 
        deleteCompleted(){
              this.todos = this.todos.filter(todo => !todo.completed)
+              this.$emit('input',this.todos)
        },
 
        editTodo(todo){
@@ -166,6 +170,16 @@ export default {
                
            }
        }
+   },
+
+   watch:{
+
+
+      value(value){
+
+        this.todos = value
+      }
+
    }
 
 }
