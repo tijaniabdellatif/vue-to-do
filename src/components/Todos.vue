@@ -23,7 +23,7 @@
                         <button class="destroy" @click.prevent="deleteTodo(todo)"></button>
                     </div>
 
-                    <input type="text"  class="edit" v-model="todo.name" @keyup.enter="doneEdit"/>
+                    <input type="text"  class="edit" v-model="todo.name" @keyup.enter="doneEdit" v-focus="todo===editing"/>
                 </li>
             </ul>
         </div>
@@ -51,6 +51,8 @@
     </section>
 </template>
 <script>
+
+import Vue from 'vue';
 
 export default {
 
@@ -142,6 +144,19 @@ export default {
            }
 
            return this.todos
+       }
+   },
+
+   directives:{
+       focus(el,value){
+
+           if(value) {
+              Vue.nextTick(_ => {
+
+                    el.focus()
+              })
+               
+           }
        }
    }
 
