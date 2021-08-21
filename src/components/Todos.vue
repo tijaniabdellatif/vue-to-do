@@ -5,16 +5,15 @@
             <h1>
                 Todos
             </h1>
-
-            <input type="text" class="new-todo" placeholder="add task" />
+            <input type="text" class="new-todo" placeholder="add task" v-model="newTodo" @keyup.enter="addTodo"/>
         </header>
 
         <div class="main">
             <ul class="todo-list">
-                <li class="todo">
+                <li class="todo" :key="todo" v-for="todo in todos">
                     <div class="view">
                         <label>
-                            Task name
+                            {{todo.name}}
                         </label>
                     </div>
                 </li>
@@ -28,6 +27,26 @@
 
 export default {
 
+  /* State with data() */
+   data (){
+        return {
+            todos:[{
+                name : 'Test Task',
+                completed : false
+            }],
+            newTodo : ''
+        } 
+   },
+
+   methods: {
+       addTodo(){
+           this.todos.push({
+               completed : false,
+               name:this.newTodo
+           })
+           this.newTodo = ''
+       }
+   },
 
 }
 
