@@ -23,7 +23,7 @@
                         <button class="destroy" @click.prevent="deleteTodo(todo)"></button>
                     </div>
 
-                    <input type="text"  class="edit" v-model="todo.name" @keyup.enter="doneEdit" v-focus="todo===editing"/>
+                    <input type="text"  class="edit" v-model="todo.name" @keyup.enter="doneEdit" v-focus="todo===editing" @blur="doneEdit" @keyup.esc="cancelEdit"/>
                 </li>
             </ul>
         </div>
@@ -46,7 +46,7 @@
                 </li>
             </ul>
 
-            <button class="clear-completed" v-show="doneTodo" @click.prevent="deleteCompleted">Clear</button>
+            <button class="clear-completed" v-show="doneTodo" @click.prevent="deleteCompleted" >Clear</button>
         </footer>
     </section>
 </template>
@@ -65,7 +65,8 @@ export default {
             }],
             newTodo : '',
             filter:'all',
-            editing : null
+            editing : null,
+            oldTodo:""
            
         } 
    },
@@ -92,11 +93,18 @@ export default {
        editTodo(todo){
 
            this.editing = todo;
+           this.oldTodo = todo.name
        },
 
        doneEdit(){
 
            this.editing = null;
+       },
+
+       cancelEdit(){
+           this.editing.name= this.oldTodo;
+           this.doneEdit()
+
        }
    },
 
