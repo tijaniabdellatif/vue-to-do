@@ -43,6 +43,8 @@
                     <a href="#" :class="{selected : filter === 'done'}" @click.prevent="filter = 'done'">Tasks done</a>
                 </li>
             </ul>
+
+            <button class="clear-completed" v-show="doneTodo" @click.prevent="deleteCompleted">Clear</button>
         </footer>
     </section>
 </template>
@@ -78,11 +80,20 @@ export default {
        deleteTodo(todo){
 
            this.todos = this.todos.filter(item => item !== todo)
+       },
+
+       deleteCompleted(){
+             this.todos = this.todos.filter(todo => !todo.completed)
        }
    },
 
  /* Computed Value */
    computed:{
+
+       doneTodo(){
+            
+            return this.todos.filter(todo => todo.completed).length
+       },
 
        hasTodo(){
           return this.todos.length > 0;
