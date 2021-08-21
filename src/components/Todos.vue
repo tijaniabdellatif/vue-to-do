@@ -19,12 +19,14 @@
                         <label>
                             {{todo.name}}
                         </label>
+
+                        <button class="destroy" @click.prevent="deleteTodo(todo)"></button>
                     </div>
                 </li>
             </ul>
         </div>
 
-        <footer class="footer">
+        <footer class="footer" v-show="hasTodo">
             <span class="todo-count">
                <strong>{{ remaining }}</strong> Tasks to do
             </span>
@@ -71,11 +73,21 @@ export default {
                name:this.newTodo
            })
            this.newTodo = ''
+       },
+
+       deleteTodo(todo){
+
+           this.todos = this.todos.filter(item => item !== todo)
        }
    },
 
  /* Computed Value */
    computed:{
+
+       hasTodo(){
+          return this.todos.length > 0;
+
+       },
       
       allDone:{
 
