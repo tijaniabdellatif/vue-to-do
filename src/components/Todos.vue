@@ -9,8 +9,11 @@
         </header>
 
         <div class="main">
+
+            <input type="checkbox" class="toggle" v-model="allDone" style="transform: translateY(-42px);" />
+
             <ul class="todo-list">
-                <li class="todo" :key="todo" v-for="todo in todos" :class="{completed: todo.completed}">
+                <li class="todo" :key="todo" v-for="todo in filteredTodos" :class="{completed: todo.completed}">
                     <div class="view">
                         <input type="checkbox" v-model="todo.completed" class="toggle" />
                         <label>
@@ -20,6 +23,25 @@
                 </li>
             </ul>
         </div>
+
+        <footer class="footer">
+            <span class="todo-count">
+               <strong>{{ remaining }}</strong> Tasks to do
+            </span>
+
+            <!--Systeme de filter-->
+            <ul class="filters">
+                <li>
+                    <a href="#" :class="{selected : filter === 'all'}" @click.prevent="filter = 'all'">All tasks</a>
+                </li>
+                <li>
+                    <a href="#" :class="{selected : filter === 'todo'}" @click.prevent="filter = 'todo'">Task to do</a>
+                </li>
+                <li>
+                    <a href="#" :class="{selected : filter === 'done'}" @click.prevent="filter = 'done'">Tasks done</a>
+                </li>
+            </ul>
+        </footer>
     </section>
 </template>
 
@@ -35,10 +57,13 @@ export default {
                 name : 'Test Task',
                 completed : false
             }],
-            newTodo : ''
+            newTodo : '',
+            filter:'all',
+           
         } 
    },
 
+/* Methods */
    methods: {
        addTodo(){
            this.todos.push({
@@ -48,6 +73,43 @@ export default {
            this.newTodo = ''
        }
    },
+
+ /* Computed Value */
+   computed:{
+      
+      allDone:{
+
+         get(){
+            
+            return this.remaining  === 0;
+         },
+
+         set(value){
+
+                 this.todos.forEach(todo => {
+                     todo.completed = value;
+                 })
+         }
+      },
+
+       remaining(){
+           return this.todos.filter(todo => !todo.completed).length
+       },
+
+       filteredTodos(){
+
+          if(this.filter === 'todo')
+          {
+              return this.todos.filter(todo => !todo.completed)
+          }
+           
+           else if(this.filter === 'done'){
+                 return this.todos.filter(todo => todo.completed)
+           }
+
+           return this.todos
+       }
+   }
 
 }
 
